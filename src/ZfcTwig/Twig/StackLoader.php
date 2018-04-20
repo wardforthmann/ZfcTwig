@@ -39,8 +39,12 @@ class StackLoader extends Twig_Loader_Filesystem
         return $this->defaultSuffix;
     }
 
-    protected function findTemplate($name)
+    protected function findTemplate($name, $acceptDeprecation)
     {
+        if ($acceptDeprecation === false) {
+            return false;
+        }
+        
         $name = (string) $name;
 
         // normalize name

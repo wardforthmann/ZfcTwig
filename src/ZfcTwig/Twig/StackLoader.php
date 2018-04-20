@@ -39,12 +39,8 @@ class StackLoader extends Twig_Loader_Filesystem
         return $this->defaultSuffix;
     }
 
-    protected function findTemplate($name, $acceptDeprecation)
+    protected function findTemplate($name, $throw = true)
     {
-        if ($acceptDeprecation === false) {
-            return false;
-        }
-        
         $name = (string) $name;
 
         // normalize name
@@ -82,7 +78,10 @@ class StackLoader extends Twig_Loader_Filesystem
                 return $this->cache[$name] = $path.'/'.$name;
             }
         }
-
-        throw new Twig_Error_Loader(sprintf('Unable to find template "%s" (looked into: %s).', $name, implode(', ', $this->paths[$namespace])));
+        if ($throw) {
+            throw new Twig_Error_Loader(sprintf('Unable to find template "%s" (looked into: %s).', $name, implode(', ', $this->paths[$namespace])));
+        } else {
+            return false;
+        }
     }
 }
